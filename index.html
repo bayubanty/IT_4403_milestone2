@@ -1,37 +1,22 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Book Search SPA</title>
-   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <title>Book Search</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="js/books.js" defer></script>
 </head>
 <body>
-  <header>
-  <h1>MILESTONE 2 </h1>
-  <p><strong> THIS PAGE SHOWS THE USE OF GOOGLE API</strong> </p>
-  <nav class="nav-links">
-    <a href="home.html"><i class="fas fa-folder-open"></i> HOME</a>
-    <a href="mybookshelf.html"><i class="fas fa-folder-open"></i> MY BOOKSHELF</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="bookshelf.html">My Bookshelf</a>
   </nav>
-</header>
 
-  <div class="container">
-    <h2>Book Search</h2>
-    
-    <form id="search-form">
-      <input type="text" id="search-input" placeholder="Enter book title or author..." required>
-      <button type="submit">Search</button>
-    </form>
-
-    <div id="book-list"></div>
-  </div>
-
-  <footer>
-    &copy; 2025 Book Search App. All rights reserved.
-  </footer>
-
-  <script src="script.js"></script>
+  <h1>Book Search</h1>
+  <input type="text" id="searchTerm" placeholder="Enter search terms...">
+  <button id="searchBtn">Search</button>
+  
+  <div id="results"></div>
+  <div id="pagination"></div>
 </body>
 </html>
