@@ -1,88 +1,60 @@
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(to right, #e0f7fa, #e8f5e9);
-  color: #333;
-  margin: 0;
-  padding: 0;
+  font-family: Arial, sans-serif;
+  margin: 20px;
 }
-
-header {
-  background-color: #00695c;
-  color: white;
-  padding: 20px 40px;
-  text-align: center;
+nav a {
+  margin-right: 10px;
 }
-
-h1 {
-  margin: 0;
-  font-size: 2.5em;
-}
-
-.nav-links {
-  margin-top: 15px;
-  display: flex;
-  justify-content: center;
+#results, #bookshelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 15px;
+  margin-top: 20px;
 }
-
-.nav-links a {
-  background-color: #004d40;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: background-color 0.3s ease;
-}
-
-.nav-links a:hover {
-  background-color: #00796b;
-}
-
-.container {
-  padding: 40px;
-  max-width: 900px;
-  margin: auto;
-  background-color: white;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  border-radius: 10px;
-}
-
-h2 {
-  color: #00796b;
-}
-
 .book-card {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #f9f9f9;
 }
-
 .book-card img {
-  width: 100px;
+  max-width: 100%;
   height: auto;
 }
 
-.book-info h3 {
-  margin-top: 0;
-  color: #2e7d32;
-}
+// js/books.js
+$(document).ready(function() {
+  const maxResults = 20;
+  let searchTerm = '';
 
-.book-info p {
-  margin: 4px 0;
-}
+  $('#searchBtn').click(function() {
+    searchTerm = $('#searchTerm').val();
+    fetchBooks(0);
+  });
 
-footer {
-  background-color: #004d40;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  margin-top: 40px;
-}
+  function fetchBooks(startIndex) {
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchTerm)}&startIndex=${startIndex}&maxResults=${maxResults}`;
+    $.getJSON(url, function(data) {
+      const items = data.items || [];
+      $('#results').empty();
+      items.forEach(book => {
+        const info = book.volumeInfo;
+        const img = info.imageLinks?.thumbnail || '';
+        $('#results').append(`
+          <div class="book-card">
+            <a href="book-details.html?id=${book.id}">${info.title}</a><br>
+            <img src="${img}" alt="${info.title}">
+          </div>
+        `);
+      });
+      renderPagination(data.totalItems);
+    });
+  }
+
+  function renderPagination(total) {
+    $('#pagination').empty();
+    const pageCount = Math.min(3, Math.ceil(total / maxResults));
+    for (let i = 0; i < pageCount; i++) {
+      $('#pagination').append(`<button onclick="fetchBooks(${i * maxResults})">Page ${i+1}</button>`);
+    }
+  }
+});
